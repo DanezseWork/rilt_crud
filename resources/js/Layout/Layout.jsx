@@ -7,10 +7,10 @@ export default function Layout({ children }) {
             <nav className="bg-green-800 p-4">
                 <ul className="flex space-x-4">
                     <li>
-                        <Link href="/" className="text-white nav-link">Dashboard</Link>
+                        <Link href="/" className="text-white nav-link">Clients</Link>
                     </li>
                     <li>
-                        <Link href="/clients" className="text-white nav-link">Clients</Link>
+                        <Link href="/clients/create" className="text-white nav-link">Create</Link>
                     </li>
                 </ul>
             </nav>
