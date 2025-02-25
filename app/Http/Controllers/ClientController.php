@@ -29,7 +29,13 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        $fields = $request->validate([
+            'body' => 'required',
+        ]);
+        
+        Client::create($fields);
+        
+        return redirect('/')->with('message', 'Client created.');
     }
 
     /**
@@ -37,7 +43,7 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        //
+        return inertia('Show', ['client' => $client]);
     }
 
     /**
@@ -45,7 +51,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        //
+        return inertia('Edit', ['client' => $client]);
     }
 
     /**
@@ -53,7 +59,13 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        $fields = $request->validate([
+            'body' => 'required',
+        ]);
+        
+        $client->update($fields);
+        
+        return redirect('/')->with('message', 'Client updated.');
     }
 
     /**
@@ -61,6 +73,7 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        $client->delete();
+        return redirect('/')->with('message', 'Client deleted.');
     }
 }

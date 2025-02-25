@@ -1,8 +1,11 @@
-import { Link } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 
 export default function Layout({ children }) {
     return (
         <>
+        <Head>
+            <meta head-key="description" name="description" content="This is a practice CRUD application using the React, Inertia, Laravel, and Tailwind stack also known as RILT." />
+        </Head>
         <header>
             <nav className="bg-green-800 p-4">
                 <ul className="flex space-x-4">
