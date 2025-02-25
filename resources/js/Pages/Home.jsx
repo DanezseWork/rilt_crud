@@ -2,6 +2,7 @@ import { Head, Link, usePage } from "@inertiajs/react";
 import { useForm } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 import { Eye, Trash2, Pencil } from "lucide-react"
+import Modal from "@/components/Modal";
 
 export default function Home({ clients }) {
 
@@ -9,6 +10,7 @@ export default function Home({ clients }) {
     const { flash } = usePage().props;
     const [message, setMessage] = useState(flash?.message || '');
     const { component } = usePage();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     function submit(e, id) {
         e.preventDefault()
@@ -31,6 +33,18 @@ export default function Home({ clients }) {
         <>
             <Head title={component} />
             <h1 className="title">Clients</h1>
+            <div className="min-h-screen flex items-center justify-center">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700"
+        >
+          Open Modal
+        </button>
+      </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="My Modal">
+        <p>This is a simple modal using React, Inertia.js, Laravel, and Tailwind!</p>
+      </Modal>
 
             {message && <div className="bg-green-500 text-white p-2 rounded-xl">{message}</div>}
 
@@ -53,15 +67,7 @@ export default function Home({ clients }) {
                                 <span>{new Date(client.created_at).toLocaleTimeString()}</span>
                             </div>
                         </td>
-                        {/* <td className="w-1/8 p-2">
-                            <div className="flex flex-col gap-2 text-center">
-                                <Link href={`/clients/${client.id}`} className="text-green-300 font-bold">Show...</Link>
-                                <form onSubmit={(e) => submit(e, client.id)} >
-                                    <button className="text-red-400 font-bold">Delete</button>
-                                </form>
-                                <Link href={`/clients/${client.id}/edit`} className="text-blue-400 font-bold">Edit</Link>
-                            </div>
-                        </td> */}
+
                         <td className="w-1/8 p-2">
                             <div className="flex gap-2 justify-center">
                                 {/* Show Icon */}
