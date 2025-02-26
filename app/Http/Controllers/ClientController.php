@@ -13,7 +13,7 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::latest()->paginate(10);
-        return inertia('Home', ['clients' => $clients]);
+        return inertia('Clients/Home', ['clients' => $clients]);
     }
 
     /**
@@ -21,7 +21,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-    return inertia('Create');
+        return inertia('Create');
     }
 
     /**
@@ -35,7 +35,7 @@ class ClientController extends Controller
         
         Client::create($fields);
         
-        return redirect('/')->with('message', 'Client created.');
+        return redirect('/clients')->with('message', 'Client created.');
     }
 
     /**
@@ -65,7 +65,7 @@ class ClientController extends Controller
         
         $client->update($fields);
         
-        return redirect('/')->with('message', 'Client updated.');
+        return redirect('/clients')->with('message', 'Client updated.');
     }
 
     /**
@@ -74,6 +74,6 @@ class ClientController extends Controller
     public function destroy(Client $client)
     {
         $client->delete();
-        return redirect('/')->with('message', 'Client deleted.');
+        return redirect('/clients')->with('message', 'Client deleted.');
     }
 }
