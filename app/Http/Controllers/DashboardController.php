@@ -14,7 +14,11 @@ class DashboardController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Dashboard');
+        $clientCount = Client::count();
+
+        return Inertia::render('Dashboard', [
+            'clientCount' => $clientCount
+        ]);
     }
    
 }

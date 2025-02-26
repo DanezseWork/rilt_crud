@@ -30,8 +30,12 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'body' => 'required',
-        ]);
+            'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:clients,email',
+        'age' => 'nullable|integer|min:0',
+        'phone' => 'nullable|string|max:20',
+        'occupation' => 'nullable|string|max:255',
+    ]);
         
         Client::create($fields);
         
@@ -60,7 +64,11 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $fields = $request->validate([
-            'body' => 'required',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:clients,email,' . $client->id,
+            'age' => 'nullable|integer|min:0',
+            'phone' => 'nullable|string|max:20',
+            'occupation' => 'nullable|string|max:255',
         ]);
         
         $client->update($fields);

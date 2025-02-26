@@ -16,7 +16,8 @@ export default function Home({ clients }) {
 
     // Form handling
     const { data, setData, post, put, processing, errors } = useForm({
-        body: "",
+        name: "",
+        email: "",
     });
 
     useEffect(() => {
@@ -33,7 +34,9 @@ export default function Home({ clients }) {
     function openModal(type, client = null) {
         setSelectedClient(client);
         setModalType(type);
-        setData("body", client?.body || "");
+        setData("name", client?.name || "");
+        setData("email", client?.email || "");
+        setData("phone", client?.phone || "");
         setIsModalOpen(true);
     }
 
@@ -77,23 +80,27 @@ export default function Home({ clients }) {
             <table className="w-full border-collapse border border-gray-200">
                 <thead>
                     <tr>
-                        <th className="p-2">Client</th>
-                        <th className="p-2">Date Joined</th>
-                        <th className="p-2 text-center">Actions</th>
+                        <th className="p-5">Client</th>
+                        <th className="p-5">Email</th>
+                        <th className="p-5">Phone</th>
+                        <th className="p-5">Date Joined</th>
+                        <th className="p-5 text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {clients.data.map((client) => (
                         <tr key={client.id} className="border-b">
-                            <td className="p-2">{client.body}</td>
-                            <td className="p-2">
+                            <td className="p-5">{client.name}</td>
+                            <td>{client.email}</td>
+                            <td>{client.phone}</td>
+                            <td className="p-5">
                                 <div className="text-sm text-gray-600">
                                     <span>{new Date(client.created_at).toDateString()}</span>
                                     <br />
                                     <span>{new Date(client.created_at).toLocaleTimeString()}</span>
                                 </div>
                             </td>
-                            <td className="p-2">
+                            <td className="p-5">
                                 <div className="flex gap-2 justify-center">
                                     {/* Show Icon */}
                                     <button onClick={() => openModal("show", client)} className="text-green-300">
@@ -138,7 +145,9 @@ export default function Home({ clients }) {
             <Modal isOpen={isModalOpen} onClose={closeModal} title={modalType === "show" ? "Client Details" : modalType === "edit" ? "Edit Client" : modalType === "delete" ? "Delete Client" : "Add Client"}>
                 {modalType === "show" && selectedClient && (
                     <div>
-                        <p className="font-medium">{selectedClient.body}</p>
+                        <p className="font-medium">{selectedClient.name}</p>
+                        <p className="text-sm font-light">{selectedClient.email}</p>
+                        <p className="text-sm font-light">{selectedClient.phone}</p>
                         <div className="text-sm text-gray-500">
                             Joined: {new Date(selectedClient.created_at).toDateString()} at {new Date(selectedClient.created_at).toLocaleTimeString()}
                         </div>
@@ -147,7 +156,9 @@ export default function Home({ clients }) {
 
                 {modalType === "edit" && selectedClient && (
                     <form onSubmit={submitEdit} className="flex flex-col">
-                        <textarea rows="5" className="border p-2 rounded" value={data.body} onChange={(e) => setData("body", e.target.value)} />
+                        <input className="border p-2 rounded" placeholder="Name" type="text" value={data.name} onChange={(e) => setData("name", e.target.value)} />
+                        <input className="border p-2 rounded" placeholder="Email" type="email" value={data.email} onChange={(e) => setData("email", e.target.value)} />
+                        <input className="border p-2 rounded" placeholder="Phone Number" type="tel" value={data.phone} onChange={(e) => setData("phone", e.target.value)} />
                         <button type="submit" className="mt-2 bg-blue-600 text-white px-4 py-2 rounded" disabled={processing}>
                             Update
                         </button>
@@ -155,8 +166,10 @@ export default function Home({ clients }) {
                 )}
 
                 {modalType === "create" && (
-                    <form onSubmit={submitCreate} className="flex flex-col">
-                        <textarea rows="5" className="border p-2 rounded" value={data.body} onChange={(e) => setData("body", e.target.value)} />
+                    <form onSubmit={submitCreate} className="flex flex-col gap-2">
+                        <input className="border p-2 rounded" placeholder="Name" type="text" value={data.name} onChange={(e) => setData("name", e.target.value)} />
+                        <input className="border p-2 rounded" placeholder="Email" type="email" value={data.email} onChange={(e) => setData("email", e.target.value)} />
+                        <input className="border p-2 rounded" placeholder="Phone Number" type="tel" value={data.phone} onChange={(e) => setData("phone", e.target.value)} />
                         <button type="submit" className="mt-2 bg-green-600 text-white px-4 py-2 rounded" disabled={processing}>
                             Add
                         </button>
