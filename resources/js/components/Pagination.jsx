@@ -9,10 +9,10 @@ export default function Pagination({ meta, onPageSizeChange }) {
     return (
         <div className="flex justify-between items-center mt-4">
             {/* Show Entries Picker */}
-            <div className="flex items-center gap-2">
-                <span>Show</span>
+            <div className="flex items-center gap-1">
+                <span className="font-bold text-sm text-gray-300">Show</span>
                 <select
-                    className="border px-2 py-1 rounded"
+                    className="border border-gray-300 text-gray-500 font-bold px-2 py-1 rounded"
                     value={meta.per_page || 10}
                     onChange={(e) => onPageSizeChange(e.target.value)}
                 >
@@ -20,7 +20,9 @@ export default function Pagination({ meta, onPageSizeChange }) {
                         <option key={size} value={size}>{size}</option>
                     ))}
                 </select>
-                <span>entries</span>
+                <span className="font-bold text-sm text-gray-300">of</span>
+                <span className="font-bold text-sm text-gray-300">{meta.total}</span>
+                <span className="font-bold text-sm text-gray-300">entries</span>
             </div>
 
             {/* Pagination Links */}

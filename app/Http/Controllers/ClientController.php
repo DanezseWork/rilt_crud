@@ -14,10 +14,12 @@ class ClientController extends Controller
 {
     $perPage = $request->input('per_page', 10);
     $clients = Client::latest()->paginate($perPage)->withQueryString();
+    $clientCount = Client::count();
 
     return inertia('Clients/Home', [
         'clients' => [
             'data' => $clients->items(),
+            'count' => $clientCount,
             'meta' => [
                 'current_page' => $clients->currentPage(),
                 'last_page' => $clients->lastPage(),

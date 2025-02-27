@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { Eye, Trash2, Pencil, PlusCircle } from "lucide-react";
 import Modal from "@/components/Modal";
 import Pagination from "@/components/Pagination";
+import SearchBar from "@/components/SearchBar";
 import { router } from "@inertiajs/react";
-
 
 
 export default function Home({ clients }) {
@@ -12,6 +12,7 @@ export default function Home({ clients }) {
     const { flash } = usePage().props;
     const [message, setMessage] = useState(flash?.message || '');
     const { component } = usePage();
+    const [searchQuery, setSearchQuery] = useState("");
 
     // State for modals
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +24,13 @@ export default function Home({ clients }) {
         name: "",
         email: "",
     });
+
+    const filteredClients = clients.data.filter(client =>
+        (client.name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+        (client.email?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+        (client.phone?.toLowerCase() || "").includes(searchQuery.toLowerCase())
+    );
+    
 
     useEffect(() => {
         if (flash?.message) {
@@ -77,6 +85,7 @@ export default function Home({ clients }) {
             <h1 className="text-2xl font-bold text-center my-4">Clients</h1>
 
             <div className="flex justify-between mb-4">
+            <SearchBar onSearch={setSearchQuery} placeholder="Search clients..." />
                 <button
                     onClick={() => openModal("create")}
                     className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 flex items-center gap-2"
@@ -94,13 +103,13 @@ export default function Home({ clients }) {
                             <th className="p-5 text-left">Client</th>
                             <th className="p-5 text-left">Email</th>
                             <th className="p-5 text-left">Phone</th>
-                            <th className="p-5 text-left">Date Joined</th>
+                            <th className="p-5 text-left text-nowrap">Date Joined</th>
                             <th className="p-5 text-center ">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {clients.data.map((client) => (
-                            <tr key={client.id} className="border-b">
+                        {filteredClients.map((client) => (
+                            <tr key={client.id} className="border-b border-gray-300">
                                 <td className="p-5">{client.name}</td>
                                 <td className="p-5">{client.email}</td>
                                 <td className="p-5">{client.phone}</td>
