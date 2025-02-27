@@ -2,6 +2,10 @@ import { Head, Link, usePage, useForm } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 import { Eye, Trash2, Pencil, PlusCircle } from "lucide-react";
 import Modal from "@/components/Modal";
+import Pagination from "@/components/Pagination";
+import { router } from "@inertiajs/react";
+
+
 
 export default function Home({ clients }) {
     const { delete: destroy } = useForm();
@@ -61,6 +65,12 @@ export default function Home({ clients }) {
         destroy(`/clients/${selectedClient.id}`, { preserveScroll: true, onSuccess: () => closeModal() });
     }
 
+    function handlePageSizeChange(perPage) {
+        router.get('/clients', { per_page: perPage }, { preserveScroll: true });
+    }
+
+  
+
     return (
         <>
             <Head title="Clients" />
@@ -77,69 +87,54 @@ export default function Home({ clients }) {
 
             {message && <div className="bg-green-500 text-white p-2 rounded-xl">{message}</div>}
 
-            <table className="w-full border-collapse border border-gray-200">
-                <thead>
-                    <tr>
-                        <th className="p-5">Client</th>
-                        <th className="p-5">Email</th>
-                        <th className="p-5">Phone</th>
-                        <th className="p-5">Date Joined</th>
-                        <th className="p-5 text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {clients.data.map((client) => (
-                        <tr key={client.id} className="border-b">
-                            <td className="p-5">{client.name}</td>
-                            <td>{client.email}</td>
-                            <td>{client.phone}</td>
-                            <td className="p-5">
-                                <div className="text-sm text-gray-600">
-                                    <span>{new Date(client.created_at).toDateString()}</span>
-                                    <br />
-                                    <span>{new Date(client.created_at).toLocaleTimeString()}</span>
-                                </div>
-                            </td>
-                            <td className="p-5">
-                                <div className="flex gap-2 justify-center">
-                                    {/* Show Icon */}
-                                    <button onClick={() => openModal("show", client)} className="text-green-300">
-                                        <Eye className="w-5 h-5 mx-auto" />
-                                    </button>
-
-                                    {/* Edit Icon */}
-                                    <button onClick={() => openModal("edit", client)} className="text-blue-400">
-                                        <Pencil className="w-5 h-5 mx-auto" />
-                                    </button>
-
-                                    {/* Delete Icon */}
-                                    <button onClick={() => openModal("delete", client)} className="text-red-400">
-                                        <Trash2 className="w-5 h-5 mx-auto" />
-                                    </button>
-                                </div>
-                            </td>
+            <div className="max-h-[70vh] overflow-auto relative shadow-md">
+                <table className="w-full">
+                    <thead className="sticky top-0 bg-white shadow-md">
+                        <tr>
+                            <th className="p-5 text-left">Client</th>
+                            <th className="p-5 text-left">Email</th>
+                            <th className="p-5 text-left">Phone</th>
+                            <th className="p-5 text-left">Date Joined</th>
+                            <th className="p-5 text-center ">Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {clients.data.map((client) => (
+                            <tr key={client.id} className="border-b">
+                                <td className="p-5">{client.name}</td>
+                                <td className="p-5">{client.email}</td>
+                                <td className="p-5">{client.phone}</td>
+                                <td className="p-5">
+                                    <div className="text-sm text-gray-600">
+                                        <span>{new Date(client.created_at).toDateString()}</span>
+                                        <br />
+                                        <span>{new Date(client.created_at).toLocaleTimeString()}</span>
+                                    </div>
+                                </td>
+                                <td className="p-5">
+                                    <div className="flex gap-2 justify-center">
+                                        <button onClick={() => openModal("show", client)} className="text-green-300">
+                                            <Eye className="w-5 h-5 mx-auto" />
+                                        </button>
+
+                                        <button onClick={() => openModal("edit", client)} className="text-blue-400">
+                                            <Pencil className="w-5 h-5 mx-auto" />
+                                        </button>
+
+                                        <button onClick={() => openModal("delete", client)} className="text-red-400">
+                                            <Trash2 className="w-5 h-5 mx-auto" />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Pagination */}
-            <div className="mt-5">
-                {clients.links.map((link) =>
-                    link.url ? (
-                        <Link
-                            href={link.url}
-                            key={link.label}
-                            dangerouslySetInnerHTML={{ __html: link.label }}
-                            className={`px-4 py-2 mx-1 rounded-lg text-gray-700 border ${
-                                link.active ? "bg-green-500 text-white" : "hover:bg-gray-200"
-                            }`}
-                        />
-                    ) : (
-                        <span key={link.label} dangerouslySetInnerHTML={{ __html: link.label }} className="px-4 py-2 text-gray-400" />
-                    )
-                )}
-            </div>
+            
+            <Pagination meta={clients.meta} onPageSizeChange={handlePageSizeChange} />
 
             {/* Dynamic Modal */}
             <Modal isOpen={isModalOpen} onClose={closeModal} title={modalType === "show" ? "Client Details" : modalType === "edit" ? "Edit Client" : modalType === "delete" ? "Delete Client" : "Add Client"}>

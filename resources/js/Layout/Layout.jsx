@@ -26,7 +26,7 @@ export default function Layout({ children }) {
                         <Link href="/appointments" className="text-white nav-link">Appointments</Link>
                     </li>
                 </ul> */}
-                 <ul className="flex mx-auto space-x-4">
+                 <ul className="flex mx-auto space-x-4 justify-center py-3">
                     {[
                         { name: "Dashboard", path: "/" },
                         { name: "Clients", path: "/clients" },
