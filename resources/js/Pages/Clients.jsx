@@ -131,7 +131,6 @@ export default function Home({ clients }) {
             </div>
 
             {/* {message && <div className="bg-green-500 text-white p-2 rounded-xl">{message}</div>} */}
-
             <div className="max-h-[70vh] overflow-auto relative shadow-md">
                 <table className="w-full">
                     <thead className="sticky top-0 bg-white shadow-md">

@@ -27,7 +27,7 @@ class ClientController extends Controller
         $clients = $query->paginate($perPage)->withQueryString();
         $clientCount = $query->count(); // Count after filtering
     
-        return inertia('Clients/Home', [
+        return inertia('Clients', [
             'clients' => [
                 'data' => $clients->items(),
                 'count' => $clientCount,
