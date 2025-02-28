@@ -1,19 +1,23 @@
-import { Link } from "@inertiajs/react";
+import ReactPaginate from "react-paginate";
 
 export default function Pagination({ meta, onPageSizeChange }) {
-    if (!meta || !Array.isArray(meta.links)) {
-        console.warn("Pagination Error: meta.links is not an array", meta);
+    if (!meta || !meta.total || !meta.per_page) {
+        console.warn("Pagination Error: Invalid meta data", meta);
         return null;
     }
 
+    const totalPages = meta.last_page;
+    const currentPage = meta.current_page - 1; // react-paginate uses 0-based index
+
     return (
         <div className="flex justify-between items-center mt-4">
+            
             {/* Show Entries Picker */}
             <div className="flex items-center gap-1">
                 <span className="font-bold text-sm text-gray-300">Show</span>
                 <select
                     className="border border-gray-300 text-gray-500 font-bold px-2 py-1 rounded"
-                    value={meta.per_page || 10}
+                    value={meta.per_page}
                     onChange={(e) => onPageSizeChange(e.target.value)}
                 >
                     {[10, 25, 50, 100].map((size) => (
@@ -25,37 +29,26 @@ export default function Pagination({ meta, onPageSizeChange }) {
                 <span className="font-bold text-sm text-gray-300">entries</span>
             </div>
 
-            {/* Pagination Links */}
-            <div className="flex overflow-hidden rounded-lg border border-gray-300">
-                {meta.links.map((link, index) => {
-                    let label = link.label;
+            {/* Pagination */}
+            <ReactPaginate
+                previousLabel="‹"
+                nextLabel="›"
+                breakLabel="..."
+                pageCount={totalPages}
+                forcePage={currentPage}
+                marginPagesDisplayed={1} // Show first & last page numbers
+                pageRangeDisplayed={3} // Show 3 pages around the current
+                onPageChange={(data) => onPageSizeChange(meta.per_page, data.selected + 1)}
 
-                    // Replace Laravel's "Previous" and "Next" with "<" and ">"
-                    if (label.toLowerCase().includes("previous")) label = "<";
-                    if (label.toLowerCase().includes("next")) label = ">";
-
-                    return link.url ? (
-                        <Link
-                            key={index}
-                            href={link.url}
-                            className={`px-4 py-2 border-r border-gray-300 text-md font-bold ${
-                                link.active
-                                    ? "bg-green-500 text-white font-bold"
-                                    : "hover:bg-gray-100 text-gray-500"
-                            }`}
-                        >
-                            {label}
-                        </Link>
-                    ) : (
-                        <span
-                            key={index}
-                            className="px-4 py-2 text-gray-400 text-md border-r border-gray-300"
-                        >
-                            {label}
-                        </span>
-                    );
-                })}
-            </div>
+                // Styling classes
+                containerClassName="flex items-center border border-gray-300 rounded-lg overflow-hidden"
+                pageLinkClassName="flex items-center justify-center px-4 py-2 text-md rounded-md font-bold text-gray-600 hover:bg-gray-100 cursor-pointer w-full h-full"
+                activeLinkClassName="bg-green-500 text-white font-bold rounded-md hover:bg-green-500"
+                breakClassName="px-3 py-2 text-gray-400"
+                previousLinkClassName="flex items-center justify-center rounded-md px-4 py-2 font-bold text-gray-600 hover:bg-gray-100 cursor-pointer"
+                nextLinkClassName="flex items-center justify-center rounded-md px-4 py-2 font-bold text-gray-600 hover:bg-gray-100 cursor-pointer"
+                disabledClassName="text-gray-400 cursor-not-allowed"
+            />
         </div>
     );
 }
