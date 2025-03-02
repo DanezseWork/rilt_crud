@@ -10,17 +10,20 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::create('pets', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('client_id')->constrained()->onDelete('cascade');
-        $table->string('name');
-        $table->string('species');
-        $table->string('breed')->nullable();
-        $table->date('birthdate')->nullable();
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('pets', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('breed');
+            $table->integer('age'); // Make sure this exists
+            $table->integer('weight');
+            $table->string('color');
+            $table->enum('gender', ['male', 'female']);
+            $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
+    
 
 
     /**

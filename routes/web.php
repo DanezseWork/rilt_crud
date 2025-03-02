@@ -5,7 +5,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PetController;
 use Illuminate\Support\Facades\Route;
 
-Route::get("/", [DashboardController::class, 'index'])->name('dashboard');
+Route::get("/dashboard", [DashboardController::class, 'index'])->name('dashboard');
 
 Route::resource('clients', ClientController::class);
 
